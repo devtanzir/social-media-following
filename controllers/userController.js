@@ -12,6 +12,23 @@ export const getUserController = asyncHandler(async (req, res) => {
 });
 
 /**
+ * GET ONE USER
+ * @method GET /api/v1/user/:id
+ */
+export const getSingleUserController = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const data = await prisma.user.findUnique({
+    where: { id },
+    include: {
+      follower: { include: { follower: true } },
+      following: { include: { following: true } },
+    },
+  });
+
+  res.status(200).json(data);
+});
+
+/**
  * CREATE USER
  * @method POST /api/v1/user
  */
